@@ -1,2 +1,3 @@
 backend/config/config.js
 frontend/src/config/config.js
+backend/config/storage_config.json
