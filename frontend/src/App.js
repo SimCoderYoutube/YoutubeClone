@@ -6,6 +6,7 @@ import axios from 'axios'
 
 import Home from './components/Home'
 import Login from './components/user/Login'
+import Upload from './components/user/Upload'
 import 'bootstrap/dist/css/bootstrap.css';
 
 import './styles.css';
@@ -49,6 +50,7 @@ export class App extends Component {
         <Router>
           <Route path="/" exact component={Home} />
           <Route path="/login" exact component={Login} />
+          <Route path="/upload" exact component={Upload} />
         </Router>
       )
     }

@@ -17,7 +17,6 @@ module.exports = {
         }
 
         const userJson = JSON.parse(user);
-        console.log(userJson)
 
         firebaseAdmin.auth().verifyIdToken(idToken)
             .then(decodedToken => {
