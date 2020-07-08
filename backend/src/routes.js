@@ -12,7 +12,7 @@ router.route('/').get(function (req, res) {
 
 
 router.route('/api/user/verify').post(function (req, res) {
-    const {user, idToken} = req.query;
+    const { user, idToken } = req.query;
     userFunc.verifyAccount(user, idToken)
         .then(result => {
             res.json(result);
@@ -23,10 +23,9 @@ router.route('/api/user/verify').post(function (req, res) {
 });
 
 router.route('/api/video/upload').post(upload, videoFunc.upload, function (req, res) {
-    const {description, name, user} = req.query;
+    const { description, name, user, idToken } = req.query;
 
-    console.log("asdasd")
-    videoFunc.save(description, name, req.files, user)
+    videoFunc.save(description, name, req.files, user, idToken)
         .then(result => {
             res.json(result);
         })
@@ -35,6 +34,16 @@ router.route('/api/video/upload').post(upload, videoFunc.upload, function (req, 
         })
 });
 
+
+router.route('/api/video/list').get(function (req, res) {
+    videoFunc.list()
+        .then(result => {
+            res.json(result);
+        })
+        .catch(error => {
+            res.json(error);
+        })
+});
 
 module.exports = router;
 

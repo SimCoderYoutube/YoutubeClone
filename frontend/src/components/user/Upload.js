@@ -14,11 +14,11 @@ export class Upload extends Component {
             image: ''
         }
 
-        this.handleUpload =this.handleUpload.bind(this);
+        this.handleUpload = this.handleUpload.bind(this);
     }
 
-    handleUpload(){
-        if(this.state.video == null || this.state.video == null){
+    handleUpload() {
+        if (this.state.video == null || this.state.video == null) {
             return;
         }
 
@@ -26,20 +26,26 @@ export class Upload extends Component {
         data.append('files', this.state.video)
         data.append('files', this.state.image)
 
-        const {description, name} = this.state
+        const { description, name } = this.state
 
-        axios.post('http://127.0.0.1:6200/api/video/upload', data, {params: {description, name, user: firebase.auth().currentUser}})
-        .then(result => {
-            console.log(result)
-        })
-        .catch(error => {
-            console.log(error)
-        })
+        firebase.auth().currentUser.getIdToken(true)
+            .then(idToken => {
+                axios.post('http://127.0.0.1:6200/api/video/upload', data, { params: { description, name, user: firebase.auth().currentUser, idToken } })
+                    .then(result => {
+                        console.log(result)
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+            })
+            .catch(error => {
+                console.log(error)
+            })
     }
     render() {
         return (
             <div>
-                <Navbar/>
+                <Navbar />
                 <input
                     placeholder="Name"
                     className="col-md-12"
@@ -63,7 +69,7 @@ export class Upload extends Component {
                     value={this.state.image.filename}
                     onChange={e => this.setState({ image: e.target.files[0] })} />
 
-                <button 
+                <button
                     className="col-md-12"
                     onClick={this.handleUpload}>
                     Upload

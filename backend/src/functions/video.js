@@ -1,5 +1,6 @@
 const CLOUD_BUCKET = 'youtube_clone_bucket';
 
+const userFunc = require('./user')
 const Video = require('../models/video');
 
 const { Storage } = require('@google-cloud/storage');
@@ -8,7 +9,6 @@ const storage = new Storage({ projectId: CLOUD_BUCKET, keyFilename: '/app/config
 const bucket = storage.bucket(CLOUD_BUCKET);
 
 module.exports = {
-
     upload: (req, res, next) => {
         const { user } = req.query;
 
@@ -47,7 +47,7 @@ module.exports = {
                         }
                         req.files[index].cloudStoragePublicUrl = `https://storage.googleapis.com/${CLOUD_BUCKET}/${name}`
                         resolve();
-                    }catch(error) {
+                    } catch (error) {
                         reject(error)
                     }
                 })
@@ -63,25 +63,39 @@ module.exports = {
                 next();
             })
             .catch(next)
-
-
     },
 
-    save: (description, name, files, user) => new Promise((resolve, reject) => {
-        const userJson = JSON.parse(user);
-        const mVideo = new Video();
+    save: (description, name, files, user, idToken) => new Promise((resolve, reject) => {
+        userFunc.verifyAccount(user, idToken)
+            .then(result => {
+                const mVideo = new Video();
 
-        mVideo.name = name;
-        mVideo.description = description;
-        mVideo.image = files[1].cloudStoragePublicUrl;
-        mVideo.video = files[0].cloudStorageObject;
-        mVideo.creator = userJson.uid;
-        console.log(mVideo)
-        mVideo.save().then(result => {
-            resolve(result);
-        }).catch(error => {
-            reject(error);
-        })
+                mVideo.name = name;
+                mVideo.description = description;
+                mVideo.image = files[1].cloudStoragePublicUrl;
+                mVideo.video = files[0].cloudStorageObject;
+                mVideo.creator = result._id;
+                console.log(mVideo)
+                mVideo.save().then(result => {
+                    resolve(result);
+                }).catch(error => {
+                    reject(error);
+                })
+            }).catch(error => {
+                reject(error);
+            })
+    }),
 
+    list: () => new Promise((resolve, reject) => {
+        Video
+            .find()
+            .populate('creator')
+            .exec()
+            .then(result => {
+                resolve(result);
+            }).catch(error => {
+                reject(error);
+            })
     })
+
 }

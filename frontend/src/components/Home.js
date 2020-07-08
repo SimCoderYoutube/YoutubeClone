@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Navbar from './Navbar'
+import VideoList from './VideoList'
 
 export class Home extends Component {
     render() {
@@ -7,6 +8,8 @@ export class Home extends Component {
             <div>
                 <Navbar/>
                 this is home
+
+                <VideoList/>
             </div>
         )
     }
