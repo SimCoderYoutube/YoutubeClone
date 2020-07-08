@@ -96,6 +96,43 @@ module.exports = {
             }).catch(error => {
                 reject(error);
             })
+    }),
+
+    getById: (id) => new Promise((resolve, reject) => {
+        Video
+            .findById(id)
+            .populate('creator')
+            .exec()
+            .then(video => {
+                module.exports.generateSignedUrl(video.video).then(result => {
+                    video.video = result;
+                    resolve(video);
+                }).catch(error => {
+                    reject(error);
+                })
+            }).catch(error => {
+                reject(error);
+            })
+    }),
+
+    generateSignedUrl: (filename) => new Promise((resolve, reject) => {
+        const date = new Date();
+        const month = date.getUTCMonth() + 1;
+        const day = date.getUTCDate() + 1;
+        const year = date.getUTCFullYear();
+
+        const expires = month + '-' + day + '-' + year;
+        const file = bucket.file(filename);
+        file.getSignedUrl({
+            action: 'read',
+            expires
+        }).then(result => {
+            resolve(result[0]);
+        })
+            .catch(error => {
+                reject(error);
+            })
     })
+
 
 }

@@ -45,6 +45,18 @@ router.route('/api/video/list').get(function (req, res) {
         })
 });
 
+router.route('/api/video/get').get(function (req, res) {
+    const {id} = req.query
+
+    videoFunc.getById(id)
+        .then(result => {
+            res.json(result);
+        })
+        .catch(error => {
+            res.json(error);
+        })
+});
+
 module.exports = router;
 
 

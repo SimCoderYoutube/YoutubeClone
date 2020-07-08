@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 import { LazyLoadImage } from 'react-lazy-load-image-component'
+import {Link} from 'react-router-dom'
 
 export class VideoList extends Component {
     constructor(props) {
@@ -27,11 +28,11 @@ export class VideoList extends Component {
                             return;
                         }
                         return (
-                            <div className="col-md-3">
+                            <Link className="col-md-3" to={`/display/${currentVideo._id}`}>
                                 <LazyLoadImage className="col-md-12 video-list-img" src={currentVideo.image} />
                                 <p>{currentVideo.name}</p>
                                 <p>{currentVideo.creator.name}</p>
-                            </div>
+                            </Link>
                         )
                     })}
 
