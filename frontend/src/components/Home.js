@@ -9,7 +9,7 @@ export class Home extends Component {
                 <Navbar/>
                 this is home
 
-                <VideoList/>
+                <VideoList location={'home'}/>
             </div>
         )
     }

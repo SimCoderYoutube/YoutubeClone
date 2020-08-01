@@ -41,5 +41,19 @@ module.exports = {
             .catch(error => {
                 reject(new Error(error))
             })
+    }),
+
+    getById: (id) => new Promise((resolve, reject) => {
+        if (id != null) {
+            User.findById(id)
+                .then((result) => {
+                    resolve(result);
+                })
+                .catch(error => {
+                    reject(new Error(error))
+                })
+        }else{
+            reject(new Error('id is null'))
+        }
     })
 }

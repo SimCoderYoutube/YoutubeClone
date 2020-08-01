@@ -8,6 +8,7 @@ import Home from './components/Home'
 import Login from './components/user/Login'
 import Upload from './components/user/Upload'
 import VideoDisplay from './components/VideoDisplay'
+import Profile from './components/user/Profile'
 import 'bootstrap/dist/css/bootstrap.css';
 
 import './styles.css';
@@ -53,6 +54,7 @@ export class App extends Component {
           <Route path="/login" exact component={Login} />
           <Route path="/upload" exact component={Upload} />
           <Route path="/display/:id" exact component={VideoDisplay} />
+          <Route path="/profile/:id" exact component={Profile} />
         </Router>
       )
     }

@@ -4,6 +4,8 @@ import { DefaultPlayer as Video } from 'react-html5video'
 import 'react-html5video/dist/styles.css'
 import Navbar from './Navbar'
 
+import { Link } from 'react-router-dom'
+
 export class VideoDisplay extends Component {
 
     constructor(props) {
@@ -32,16 +34,19 @@ export class VideoDisplay extends Component {
         }
 
 
+        console.log(video)
         return (
             <div>
-                <Navbar/>
+                <Navbar />
 
                 <div className="container">
                     <Video key={video.video} poster={video.image} controls={['PalyPause', 'Seek', 'Time', 'Fullscreen']}>
                         <source src={video.video} type="video/mp4" />
                     </Video>
 
-                    <p>{video.creator.name}</p>
+                    <Link to={{pathname: `/profile/${video.creator._id}`}}>
+                        <p>{video.creator.name}</p>
+                    </Link>
                     <h3>{video.name}</h3>
                     <p>{video.description}</p>
                 </div>

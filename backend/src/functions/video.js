@@ -98,6 +98,20 @@ module.exports = {
             })
     }),
 
+    getByUser: (id) => new Promise((resolve, reject) => {
+        console.log(id)
+        Video
+            .find({creator: id})
+            .populate('creator')
+            .exec()
+            .then(result => {
+                resolve(result);
+            }).catch(error => {
+                reject(error);
+            })
+    }),
+    
+
     getById: (id) => new Promise((resolve, reject) => {
         Video
             .findById(id)
