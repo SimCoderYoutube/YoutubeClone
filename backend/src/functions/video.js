@@ -4,6 +4,7 @@ const userFunc = require('./user')
 const Video = require('../models/video');
 
 const { Storage } = require('@google-cloud/storage');
+const user = require('../models/user');
 
 const storage = new Storage({ projectId: CLOUD_BUCKET, keyFilename: '/app/config/storage_config.json' });
 const bucket = storage.bucket(CLOUD_BUCKET);
@@ -101,7 +102,7 @@ module.exports = {
     getByUser: (id) => new Promise((resolve, reject) => {
         console.log(id)
         Video
-            .find({creator: id})
+            .find({ creator: id })
             .populate('creator')
             .exec()
             .then(result => {
@@ -110,7 +111,22 @@ module.exports = {
                 reject(error);
             })
     }),
-    
+
+    getBySubscriptions: (id) => new Promise((resolve, reject) => {
+        user.findOne({ firebase_id: id }).then((result) => {
+            Video
+                .find({ creator: result.subscriptions })
+                .populate('creator')
+                .exec()
+                .then(result => {
+                    resolve(result);
+                }).catch(error => {
+                    reject(error);
+                })
+        })
+
+    }),
+
 
     getById: (id) => new Promise((resolve, reject) => {
         Video

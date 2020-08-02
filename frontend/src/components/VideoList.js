@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios';
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { Link } from 'react-router-dom'
+import firebase from 'firebase'
 
 export class VideoList extends Component {
     constructor(props) {
@@ -27,6 +28,14 @@ export class VideoList extends Component {
 
             case 'profile':
                 axios.get('http://127.0.0.1:6200/api/video/user', { params: { id: this.state.id } })
+                    .then(result => {
+                        that.setState({ videoList: result.data });
+                        console.log(that.state.videoList);
+                    })
+                break;
+
+            case 'subscriptions':
+                axios.get('http://127.0.0.1:6200/api/video/subscriptions', { params: { id: firebase.auth().currentUser.uid } })
                     .then(result => {
                         that.setState({ videoList: result.data });
                         console.log(that.state.videoList);

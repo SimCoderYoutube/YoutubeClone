@@ -5,6 +5,7 @@ import axios from 'axios'
 
 
 import Home from './components/Home'
+import Subscriptions from './components/Subscriptions'
 import Login from './components/user/Login'
 import Upload from './components/user/Upload'
 import VideoDisplay from './components/VideoDisplay'
@@ -51,6 +52,7 @@ export class App extends Component {
       return (
         <Router>
           <Route path="/" exact component={Home} />
+          <Route path="/subscriptions" exact component={Subscriptions} />
           <Route path="/login" exact component={Login} />
           <Route path="/upload" exact component={Upload} />
           <Route path="/display/:id" exact component={VideoDisplay} />

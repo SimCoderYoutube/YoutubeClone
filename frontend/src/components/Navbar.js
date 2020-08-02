@@ -14,6 +14,7 @@ export class Navbar extends Component {
             <div className="navbar">
                 <Link to={{ pathname: "/login"}}>Login</Link>
                 <Link to={{ pathname: "/upload"}}>Upload</Link>
+                <Link to={{ pathname: "/subscriptions"}}>Subscriptions</Link>
                 <button onClick={this.onSignOut}>Logout</button>
             </div>
         )
