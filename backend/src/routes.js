@@ -33,6 +33,17 @@ router.route('/api/user/get').get(function (req, res) {
         })
 });
 
+router.route('/api/user/subscribe').post(function (req, res) {
+    const { user, idToken, id } = req.query;
+    userFunc.handleSubscribe(user, idToken, id)
+        .then(result => {
+            res.json(result);
+        })
+        .catch(error => {
+            res.json(error);
+        })
+});
+
 router.route('/api/video/upload').post(upload, videoFunc.upload, function (req, res) {
     const { description, name, user, idToken } = req.query;
 
@@ -65,6 +76,18 @@ router.route('/api/video/user').get(function (req, res) {
             res.json(error);
         })
 });
+router.route('/api/video/subscriptions').get(function (req, res) {
+    const { id } = req.query;
+    videoFunc.getBySubscriptions(id)
+        .then(result => {
+            res.json(result);
+        })
+        .catch(error => {
+            res.json(error);
+        })
+});
+
+
 
 router.route('/api/video/get').get(function (req, res) {
     const {id} = req.query

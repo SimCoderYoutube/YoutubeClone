@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import VideoList from '../VideoList'
 import Navbar from '../Navbar'
+import firebase from 'firebase'
 
 export class Profile extends Component {
     constructor(props) {
@@ -10,6 +11,8 @@ export class Profile extends Component {
         this.state = {
             user: null
         }
+
+        this.handleSubscribe = this.handleSubscribe.bind(this);
     }
 
     componentDidMount() {
@@ -24,6 +27,27 @@ export class Profile extends Component {
                 console.log(error);
             })
     }
+
+    handleSubscribe() {
+
+        let that = this;
+
+        firebase.auth().currentUser.getIdToken(true).then((idToken) => {
+            axios.post('http://127.0.0.1:6200/api/user/subscribe', null,
+                {
+                    params:
+                    {
+                        user: firebase.auth().currentUser,
+                        idToken,
+                        id: this.props.match.params.id
+                    }
+                }).then((result) => {
+                    console.log(result);
+                }).catch((error) => {
+                    console.log(error);
+                })
+        })
+    }
     render() {
         const { user } = this.state;
 
@@ -36,6 +60,7 @@ export class Profile extends Component {
                 <Navbar />
                 <div className="container">
                     <h1>{user.name}</h1>
+                    <button onClick={this.handleSubscribe}>Subscribe</button>
 
                     <VideoList location={'profile'} id={this.props.match.params.id} />
                 </div>

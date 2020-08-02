@@ -52,8 +52,32 @@ module.exports = {
                 .catch(error => {
                     reject(new Error(error))
                 })
-        }else{
+        } else {
             reject(new Error('id is null'))
         }
+    }),
+
+    handleSubscribe: (user, idToken, id) => new Promise((resolve, reject) => {
+        module.exports.verifyAccount(user, idToken)
+            .then((result) => {
+                User.findOne({ _id: result._id, subscriptions: { $in: [id] } }, function (error, user) {
+                    if (user == null) {
+                        User.updateOne({ _id: result._id }, { "$push": { subscriptions: id } }, { useFindAndModify: true }).then(() => {
+                            User.updateOne({ _id: id }, { "$push": { subscribers: result._id } }, { useFindAndModify: true }).then(() => {
+                                resolve();
+                            })
+                        })
+                    } else {
+                        User.updateOne({ _id: result._id }, { "$pull": { subscriptions: id } }, { useFindAndModify: true }).then(() => {
+                            User.updateOne({ _id: id }, { "$pull": { subscribers: result._id } }, { useFindAndModify: true }).then(() => {
+                                resolve();
+                            })
+                        })
+                    }
+                })
+
+            }).catch(error => {
+                reject(new Error(error))
+            })
     })
 }
